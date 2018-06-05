@@ -1,0 +1,2 @@
+# ignitecassandrapojo
+Ignite-Cassandra-PojoGenerator
