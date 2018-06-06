@@ -1,0 +1,1711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean
+		class="org.apache.ignite.cache.store.cassandra.datasource.DataSource"
+		name="cassandra">
+		<property name="contactPoints" value="localhost" />
+	</bean>
+
+	<bean class="org.apache.ignite.configuration.IgniteConfiguration">
+		<!--<property name="gridLogger">
+			<bean class="org.apache.ignite.logger.log4j.Log4JLogger">
+				<constructor-arg type="java.lang.String"
+					value="log4j.xml" />
+			</bean>
+		</property>-->
+		<property name="cacheConfiguration">
+			<list>
+				
+				
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="address_by_customer_id" />
+	<property name="name" value="AddressByCustomerId" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.AddressByCustomerIdPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.AddressByCustomerId</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="address_by_customer_id">
+                                            <keyPersistence class="com.fexco.brw.tables.AddressByCustomerIdPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="customerId" column="customer_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="addressId" column=" address_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.AddressByCustomerId" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="customerId" column="customer_id" />
+							<field name="addressId" column="address_id" />
+							<field name="address1" column="address1" />
+							<field name="address2" column="address2" />
+							<field name="address3" column="address3" />
+							<field name="addressType" column="address_type" />
+							<field name="city" column="city" />
+							<field name="country" column="country" />
+							<field name="county" column="county" />
+							<field name="postcode" column="postcode" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="address_by_post_code" />
+	<property name="name" value="AddressByPostCode" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.AddressByPostCodePK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.AddressByPostCode</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="address_by_post_code">
+                                            <keyPersistence class="com.fexco.brw.tables.AddressByPostCodePK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="postcode" column="postcode" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="addressId" column=" address_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.AddressByPostCode" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="postcode" column="postcode" />
+							<field name="addressId" column="address_id" />
+							<field name="address1" column="address1" />
+							<field name="address2" column="address2" />
+							<field name="address3" column="address3" />
+							<field name="addressType" column="address_type" />
+							<field name="city" column="city" />
+							<field name="country" column="country" />
+							<field name="county" column="county" />
+							<field name="customerId" column="customer_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="bulettin_by_location_and_date" />
+	<property name="name" value="BulettinByLocationAndDate" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.BulettinByLocationAndDatePK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.BulettinByLocationAndDate</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="bulettin_by_location_and_date">
+                                            <keyPersistence class="com.fexco.brw.tables.BulettinByLocationAndDatePK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="locationId" column="location_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="startDate" column=" start_date" />
+							<field name="endDate" column=" end_date" />
+							<field name="messageId" column=" message_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.BulettinByLocationAndDate" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="locationId" column="location_id" />
+							<field name="startDate" column="start_date" />
+							<field name="endDate" column="end_date" />
+							<field name="messageId" column="message_id" />
+							<field name="created" column="created" />
+							<field name="message" column="message" />
+							<field name="subject" column="subject" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="compliance_rule_by_group_and_range" />
+	<property name="name" value="ComplianceRuleByGroupAndRange" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.ComplianceRuleByGroupAndRangePK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.ComplianceRuleByGroupAndRange</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="compliance_rule_by_group_and_range">
+                                            <keyPersistence class="com.fexco.brw.tables.ComplianceRuleByGroupAndRangePK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="groupId" column="group_id" />
+							<field name="rangeStart" column="range_start" />
+							<field name="rangeEnd" column="range_end" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="ruleId" column="rule_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.ComplianceRuleByGroupAndRange" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="groupId" column="group_id" />
+							<field name="rangeStart" column="range_start" />
+							<field name="rangeEnd" column="range_end" />
+							<field name="ruleId" column="rule_id" />
+							<field name="active" column="active" />
+							<field name="created" column="created" />
+							<field name="kycCheck" column="kyc_check" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="compliance_rule_field_by_rule_id" />
+	<property name="name" value="ComplianceRuleFieldByRuleId" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.ComplianceRuleFieldByRuleIdPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.ComplianceRuleFieldByRuleId</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="compliance_rule_field_by_rule_id">
+                                            <keyPersistence class="com.fexco.brw.tables.ComplianceRuleFieldByRuleIdPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="ruleId" column="rule_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="fieldId" column=" field_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.ComplianceRuleFieldByRuleId" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="ruleId" column="rule_id" />
+							<field name="fieldId" column="field_id" />
+							<field name="dependsOn" column="depends_on" />
+							<field name="required" column="required" />
+							<field name="type" column="type" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="currencies" />
+	<property name="name" value="Currencies" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">java.lang.String</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.Currencies</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="currencies">
+                                            <keyPersistence class="java.lang.String" strategy="PRIMITIVE" column="currency" >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.Currencies" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="currency" column="currency" />
+							<field name="active" column="active" />
+							<field name="description" column="description" />
+							<field name="minimumDenomination" column="minimum_denomination" />
+							<field name="upsellingDenomination" column="upselling_denomination" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="currency_denomination" />
+	<property name="name" value="CurrencyDenomination" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.CurrencyDenominationPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.CurrencyDenomination</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="currency_denomination">
+                                            <keyPersistence class="com.fexco.brw.tables.CurrencyDenominationPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="currency" column="currency" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="denomination" column=" denomination" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.CurrencyDenomination" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="currency" column="currency" />
+							<field name="denomination" column="denomination" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="current_rates_by_location" />
+	<property name="name" value="CurrentRatesByLocation" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.CurrentRatesByLocationPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.CurrentRatesByLocation</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="current_rates_by_location">
+                                            <keyPersistence class="com.fexco.brw.tables.CurrentRatesByLocationPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="locationId" column="location_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="currency" column=" currency" />
+							<field name="action" column=" action" />
+							<field name="product" column=" product" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.CurrentRatesByLocation" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="locationId" column="location_id" />
+							<field name="currency" column="currency" />
+							<field name="action" column="action" />
+							<field name="product" column="product" />
+							<field name="createDate" column="create_date" />
+							<field name="rate" column="rate" />
+							<field name="source" column="source" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="customer" />
+	<property name="name" value="Customer" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">java.util.UUID</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.Customer</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="customer">
+                                            <keyPersistence class="java.util.UUID" strategy="PRIMITIVE" column="customer_id" >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.Customer" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="customerId" column="customer_id" />
+							<field name="birth" column="birth" />
+							<field name="created" column="created" />
+							<field name="email" column="email" />
+							<field name="familyName" column="family_name" />
+							<field name="firstName" column="first_name" />
+							<field name="title" column="title" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="customer_by_name_and_birth" />
+	<property name="name" value="CustomerByNameAndBirth" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.CustomerByNameAndBirthPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.CustomerByNameAndBirth</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="customer_by_name_and_birth">
+                                            <keyPersistence class="com.fexco.brw.tables.CustomerByNameAndBirthPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="familyName" column="family_name" />
+							<field name="firstName" column="first_name" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="customerId" column="customer_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.CustomerByNameAndBirth" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="familyName" column="family_name" />
+							<field name="firstName" column="first_name" />
+							<field name="customerId" column="customer_id" />
+							<field name="birth" column="birth" />
+							<field name="created" column="created" />
+							<field name="email" column="email" />
+							<field name="title" column="title" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="fee_by_location" />
+	<property name="name" value="FeeByLocation" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.FeeByLocationPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.FeeByLocation</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="fee_by_location">
+                                            <keyPersistence class="com.fexco.brw.tables.FeeByLocationPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="locationId" column="location_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="feeId" column=" fee_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.FeeByLocation" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="locationId" column="location_id" />
+							<field name="feeId" column="fee_id" />
+							<field name="action" column="action" />
+							<field name="created" column="created" />
+							<field name="defaultMin" column="default_min" />
+							<field name="percentage" column="percentage" />
+							<field name="product" column="product" />
+							<field name="rangeEnd" column="range_end" />
+							<field name="rangeStart" column="range_start" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="fee_by_location_and_range" />
+	<property name="name" value="FeeByLocationAndRange" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.FeeByLocationAndRangePK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.FeeByLocationAndRange</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="fee_by_location_and_range">
+                                            <keyPersistence class="com.fexco.brw.tables.FeeByLocationAndRangePK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="locationId" column="location_id" />
+							<field name="rangeStart" column="range_start" />
+							<field name="rangeEnd" column="range_end" />
+							<field name="action" column="action" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="feeId" column="fee_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.FeeByLocationAndRange" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="locationId" column="location_id" />
+							<field name="rangeStart" column="range_start" />
+							<field name="rangeEnd" column="range_end" />
+							<field name="action" column="action" />
+							<field name="feeId" column="fee_id" />
+							<field name="created" column="created" />
+							<field name="defaultMin" column="default_min" />
+							<field name="percentage" column="percentage" />
+							<field name="product" column="product" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="identification_by_customer_id" />
+	<property name="name" value="IdentificationByCustomerId" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.IdentificationByCustomerIdPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.IdentificationByCustomerId</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="identification_by_customer_id">
+                                            <keyPersistence class="com.fexco.brw.tables.IdentificationByCustomerIdPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="customerId" column="customer_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="identificationId" column=" identification_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.IdentificationByCustomerId" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="customerId" column="customer_id" />
+							<field name="identificationId" column="identification_id" />
+							<field name="expiry" column="expiry" />
+							<field name="identificationType" column="identification_type" />
+							<field name="issued" column="issued" />
+							<field name="reference" column="reference" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="location_by_group" />
+	<property name="name" value="LocationByGroup" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.LocationByGroupPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.LocationByGroup</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="location_by_group">
+                                            <keyPersistence class="com.fexco.brw.tables.LocationByGroupPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="groupId" column="group_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="locationId" column=" location_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.LocationByGroup" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="groupId" column="group_id" />
+							<field name="locationId" column="location_id" />
+							<field name="active" column="active" />
+							<field name="name" column="name" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="location_group" />
+	<property name="name" value="LocationGroup" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">java.util.UUID</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.LocationGroup</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="location_group">
+                                            <keyPersistence class="java.util.UUID" strategy="PRIMITIVE" column="group_id" >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.LocationGroup" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="groupId" column="group_id" />
+							<field name="active" column="active" />
+							<field name="name" column="name" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="phone_by_customer_id" />
+	<property name="name" value="PhoneByCustomerId" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.PhoneByCustomerIdPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.PhoneByCustomerId</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="phone_by_customer_id">
+                                            <keyPersistence class="com.fexco.brw.tables.PhoneByCustomerIdPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="customerId" column="customer_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="phoneId" column=" phone_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.PhoneByCustomerId" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="customerId" column="customer_id" />
+							<field name="phoneId" column="phone_id" />
+							<field name="areaCode" column="area_code" />
+							<field name="number" column="number" />
+							<field name="phoneType" column="phone_type" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="phone_by_number" />
+	<property name="name" value="PhoneByNumber" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.PhoneByNumberPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.PhoneByNumber</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="phone_by_number">
+                                            <keyPersistence class="com.fexco.brw.tables.PhoneByNumberPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="areaCode" column="area_code" />
+							<field name="number" column="number" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="phoneId" column="phone_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.PhoneByNumber" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="areaCode" column="area_code" />
+							<field name="number" column="number" />
+							<field name="phoneId" column="phone_id" />
+							<field name="customerId" column="customer_id" />
+							<field name="phoneType" column="phone_type" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="rates_by_location_and_date_mai" />
+	<property name="name" value="RatesByLocationAndDateMai" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.RatesByLocationAndDateMaiPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.RatesByLocationAndDateMai</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="rates_by_location_and_date_mai">
+                                            <keyPersistence class="com.fexco.brw.tables.RatesByLocationAndDateMaiPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="locationId" column="location_id" />
+							<field name="createDate" column="create_date" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="createTime" column="create_time" />
+							<field name="currency" column=" currency" />
+							<field name="action" column=" action" />
+							<field name="product" column=" product" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.RatesByLocationAndDateMai" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="locationId" column="location_id" />
+							<field name="createDate" column="create_date" />
+							<field name="createTime" column="create_time" />
+							<field name="currency" column="currency" />
+							<field name="action" column="action" />
+							<field name="product" column="product" />
+							<field name="rate" column="rate" />
+							<field name="source" column="source" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="rates_by_rate_plan_and_date" />
+	<property name="name" value="RatesByRatePlanAndDate" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.RatesByRatePlanAndDatePK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.RatesByRatePlanAndDate</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="rates_by_rate_plan_and_date">
+                                            <keyPersistence class="com.fexco.brw.tables.RatesByRatePlanAndDatePK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="ratePlanId" column="rate_plan_id" />
+							<field name="createDate" column="create_date" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="currency" column="currency" />
+							<field name="action" column=" action" />
+							<field name="product" column=" product" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.RatesByRatePlanAndDate" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="ratePlanId" column="rate_plan_id" />
+							<field name="createDate" column="create_date" />
+							<field name="currency" column="currency" />
+							<field name="action" column="action" />
+							<field name="product" column="product" />
+							<field name="rate" column="rate" />
+							<field name="source" column="source" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="transaction_by_pos_and_location" />
+	<property name="name" value="TransactionByPosAndLocation" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransactionByPosAndLocationPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransactionByPosAndLocation</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="transaction_by_pos_and_location">
+                                            <keyPersistence class="com.fexco.brw.tables.TransactionByPosAndLocationPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="posid" column="posid" />
+							<field name="locationid" column="locationid" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="creationdate" column="creationdate" />
+							<field name="transactionid" column=" transactionid" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.TransactionByPosAndLocation" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="posid" column="posid" />
+							<field name="locationid" column="locationid" />
+							<field name="creationdate" column="creationdate" />
+							<field name="transactionid" column="transactionid" />
+							<field name="action" column="action" />
+							<field name="baseamount" column="baseamount" />
+							<field name="currency" column="currency" />
+							<field name="fee" column="fee" />
+							<field name="fxamount" column="fxamount" />
+							<field name="product" column="product" />
+							<field name="rate" column="rate" />
+							<field name="reference" column="reference" />
+							<field name="username" column="username" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="transfer_order_by_destination" />
+	<property name="name" value="TransferOrderByDestination" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderByDestinationPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderByDestination</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="transfer_order_by_destination">
+                                            <keyPersistence class="com.fexco.brw.tables.TransferOrderByDestinationPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="destinationId" column="destination_id" />
+							<field name="destinationType" column="destination_type" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="orderId" column="order_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.TransferOrderByDestination" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="destinationId" column="destination_id" />
+							<field name="destinationType" column="destination_type" />
+							<field name="orderId" column="order_id" />
+							<field name="created" column="created" />
+							<field name="fee" column="fee" />
+							<field name="orderType" column="order_type" />
+							<field name="originId" column="origin_id" />
+							<field name="originType" column="origin_type" />
+							<field name="source" column="source" />
+							<field name="status" column="status" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="transfer_order_by_origin" />
+	<property name="name" value="TransferOrderByOrigin" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderByOriginPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderByOrigin</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="transfer_order_by_origin">
+                                            <keyPersistence class="com.fexco.brw.tables.TransferOrderByOriginPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="originId" column="origin_id" />
+							<field name="originType" column="origin_type" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="orderId" column="order_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.TransferOrderByOrigin" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="originId" column="origin_id" />
+							<field name="originType" column="origin_type" />
+							<field name="orderId" column="order_id" />
+							<field name="created" column="created" />
+							<field name="destinationId" column="destination_id" />
+							<field name="destinationType" column="destination_type" />
+							<field name="fee" column="fee" />
+							<field name="orderType" column="order_type" />
+							<field name="source" column="source" />
+							<field name="status" column="status" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="transfer_order_by_status" />
+	<property name="name" value="TransferOrderByStatus" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderByStatusPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderByStatus</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="transfer_order_by_status">
+                                            <keyPersistence class="com.fexco.brw.tables.TransferOrderByStatusPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="destinationId" column="destination_id" />
+							<field name="destinationType" column="destination_type" />
+							<field name="status" column="status" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="orderId" column="order_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.TransferOrderByStatus" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="destinationId" column="destination_id" />
+							<field name="destinationType" column="destination_type" />
+							<field name="status" column="status" />
+							<field name="orderId" column="order_id" />
+							<field name="created" column="created" />
+							<field name="fee" column="fee" />
+							<field name="orderType" column="order_type" />
+							<field name="originId" column="origin_id" />
+							<field name="originType" column="origin_type" />
+							<field name="source" column="source" />
+							<field name="userId" column="user_id" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="transfer_order_item_by_order" />
+	<property name="name" value="TransferOrderItemByOrder" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderItemByOrderPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderItemByOrder</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="transfer_order_item_by_order">
+                                            <keyPersistence class="com.fexco.brw.tables.TransferOrderItemByOrderPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="orderId" column="order_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="orderItemId" column=" order_item_id" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.TransferOrderItemByOrder" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="orderId" column="order_id" />
+							<field name="orderItemId" column="order_item_id" />
+							<field name="baseAmount" column="base_amount" />
+							<field name="currency" column="currency" />
+							<field name="currencyAmount" column="currency_amount" />
+							<field name="entryType" column="entry_type" />
+							<field name="rate" column="rate" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="transfer_order_item_cash_strap" />
+	<property name="name" value="TransferOrderItemCashStrap" />
+	<property name="writeThrough" value="true" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderItemCashStrapPK</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.TransferOrderItemCashStrap</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="transfer_order_item_cash_strap">
+                                            <keyPersistence class="com.fexco.brw.tables.TransferOrderItemCashStrapPK" strategy="POJO"  >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="orderItemId" column="order_item_id" />
+							
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							<field name="denomination" column=" denomination" />
+							
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.TransferOrderItemCashStrap" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						<field name="orderItemId" column="order_item_id" />
+							<field name="denomination" column="denomination" />
+							<field name="notecount" column="notecount" />
+							
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
+
+
+
+
+			</list>
+		</property>
+		 <property name="clientMode" value="true" /> <property name="discoverySpi"> 
+			<bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi"> <property 
+			name="ipFinder"> <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder" 
+			/> </property> </bean> </property> 
+	</bean>
+
+</beans>
+

@@ -1,0 +1,55 @@
+
+<bean class="org.apache.ignite.configuration.CacheConfiguration">
+	<property name="sqlSchema" value="XXX_TABLENAME_XXX" />
+	<property name="name" value="XXX_JAVANAME_XXX" />
+	<property name="writeThrough" value="false" />
+	<property name="readThrough" value="true" />
+	<property name="indexedTypes">
+		<list>
+			<value type="java.lang.Class">XXX_TYPE_XXX</value>
+			<value type="java.lang.Class">com.fexco.brw.tables.XXX_JAVANAME_XXX</value>
+		</list>
+	</property>
+	<property name="cacheStoreFactory">
+		<bean
+			class="org.apache.ignite.cache.store.cassandra.CassandraCacheStoreFactory">
+			<property name="dataSource" ref="cassandra" />
+			<property name="persistenceSettings">
+				<bean
+					class="org.apache.ignite.cache.store.cassandra.persistence.KeyValuePersistenceSettings">
+					<constructor-arg type="java.lang.String">
+						<value>
+										<![CDATA[
+                                        <persistence keyspace="newpos" table="XXX_TABLENAME_XXX">
+                                            <keyPersistence class="XXX_TYPE_XXX" strategy="XXX_STRATEGY_XXX" XXX_COLUMN_XXX >
+
+						<partitionKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							XXX_MAPPINGPK_XXX
+							<!--<field name="location_id" column="location_id" />-->		
+						</partitionKey>
+						<!-- Cluster key fields if POJO strategy used -->
+						<clusterKey>
+							<!-- Mapping from POJO field to Cassandra table column -->
+							XXX_MAPPINGCLUSTERKEY_XXX
+							<!--<field name="create_time" column="create_time" sort="desc"/>-->
+						</clusterKey>
+
+                                            </keyPersistence>
+
+                                            <valuePersistence class="com.fexco.brw.tables.XXX_JAVANAME_XXX" strategy="POJO"
+                     				 serializer="org.apache.ignite.cache.store.cassandra.serializer.KryoSerializer">
+       						 <!-- Mapping from POJO field to Cassandra table column -->
+						 <!-- <field name="firstName" column="first_name" /> -->
+						
+						XXX_MAPPINGPOJOVALUEPERSISTENCE_XXX
+				            </valuePersistence>
+                                        </persistence>
+                                        ]]>
+						</value>
+					</constructor-arg>
+				</bean>
+			</property>
+		</bean>
+	</property>
+</bean>
